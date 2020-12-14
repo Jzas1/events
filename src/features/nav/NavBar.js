@@ -4,7 +4,6 @@ import image from '../../../src/logo.png'
 import { NavLink, useHistory } from 'react-router-dom'
 import SignedOutMenu from './SignedOutMenu'
 import SignedInMenu from './SignedInMenu'
-
 export default function NavBar({ setFormOpen }) {
     const history = useHistory()
     const [authenticated, setAuthenticated] = useState(false)
@@ -23,9 +22,10 @@ export default function NavBar({ setFormOpen }) {
                     Re-vents
                 </Menu.Item>
                 <Menu.Item as={NavLink} to='/events' name='Events' />
+                <Menu.Item as={NavLink} to='/sandbox' name='Sandbox' />
                 {authenticated &&
                     <Menu.Item as={NavLink} to='/createEvent' >
-                        <Button onClick={() => setFormOpen(true)} positive inverted content='Create Event' />
+                        <Button positive inverted content='Create Event' />
                     </Menu.Item>}
                 {authenticated ? <SignedInMenu signOut={handleSignedOut} /> :
                     <SignedOutMenu setAuthenticated={setAuthenticated} />

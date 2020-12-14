@@ -3,9 +3,14 @@ import { Segment, Header, Form, Button } from 'semantic-ui-react'
 import image from '../../user.png'
 import cuid from 'cuid'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { updateEvent, createEvent } from '../events/eventActions'
 
 
-export default function EventForm({ setFormOpen, setEvents, createEvent, selectedEvent, updateEvent }) {
+export default function EventForm({ match, history }) {
+    const dispatch = useDispatch()
+    const selectedEvent = useSelector(state => state.event.events.find(e => e.id === match.params.id))
+
     const initialValues = selectedEvent ?? {
         title: '',
         category: '',
@@ -18,14 +23,15 @@ export default function EventForm({ setFormOpen, setEvents, createEvent, selecte
     const [values, setValues] = useState(initialValues)
 
     function handleFormSubmit() {
-        selectedEvent ? updateEvent({ ...selectedEvent, ...values }) :
+        selectedEvent ? dispatch(updateEvent({ ...selectedEvent, ...values })) :
 
-            createEvent({
-                ...values, id: cuid, hostedBy: 'Bob',
+            dispatch(createEvent({
+                ...values, id: cuid(), hostedBy: 'Bob',
                 attendees: [],
                 hostPhotoURL: image
-            })
-        setFormOpen(false)
+            }))
+        history.push('./events')
+
     }
     function handleInputChange(e) {
         const { name, value } = e.target
